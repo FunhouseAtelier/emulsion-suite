@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page_title }}{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; margin: 0; color: #1a1a1a; background: #fafafa; }
+    nav { background: #2563eb; color: white; padding: 1rem 2rem; }
+    nav a { color: white; text-decoration: none; margin-right: 1.5rem; font-weight: 500; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+    [data-hydrated="false"] { opacity: 0.6; }
+    [data-hydrated="true"]  { opacity: 1; transition: opacity 0.15s; }
+  </style>
+  {{ vite_scripts() }}
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/products/1">Widget Pro</a>
+    <a href="/products/2">Gadget Max</a>
+    <a href="/products/3">Thingamajig</a>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

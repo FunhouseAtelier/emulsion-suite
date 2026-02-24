@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ heading }}</h1>
+<p>{{ subheading }}</p>
+
+<h2>Interactive Counter</h2>
+<p>The box below is a React island — fully interactive, hydrated client-side.</p>
+
+{{ island("Counter", {"initialCount": 0}) }}
+
+<h2>Products</h2>
+<ul>
+  {% for product in products %}
+  <li>
+    <a href="/products/{{ product.id }}">{{ product.name }}</a>
+    — ${{ "%.2f"|format(product.price) }}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
