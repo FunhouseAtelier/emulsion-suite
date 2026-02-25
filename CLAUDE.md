@@ -2,10 +2,16 @@
 
 ## What This Is
 
-**Emulsion** is a Python-first web application framework that fuses FastAPI with React. It serves HTML pages via FastAPI/Jinja2 and embeds React "islands" anywhere in those pages for interactive content. Think Next.js/Remix, but Python-native.
+**Emulsion** is a Python-first, UI-agnostic web application framework built on FastAPI. It serves HTML pages via FastAPI/Jinja2 and embeds interactive "islands" anywhere in those pages. Think Next.js/Remix, but Python-native — or Astro, but with Python owning the server.
 
 **Repository**: `FunhouseAtelier/emulsion-suite` (public monorepo)
 **Owner**: Jason at Funhouse Atelier
+
+## Design Philosophy
+
+- **Modularity & UI agnosticism**: The core `emulsion` package handles all FastAPI concerns (routing, templates, CLI, extensions) with zero JS framework opinions. UI integration is provided by separate adapter packages — `emulsion-react`, and in the future `emulsion-vue`, `emulsion-svelte`, etc. — mirroring Astro's approach to UI-agnosticism. The core is useful on its own for everything from a pure API server to full SSR with Jinja2 templates, but is designed to be extended.
+- **Islands architecture**: Interactive components are opt-in "islands" hydrated into server-rendered HTML, keeping pages fast by default.
+- **Python-first**: Python owns the server, routing, and data. Node.js is build-time only. Developers think in Python; JS is for UI interactivity.
 
 ## Architecture Decisions
 
@@ -22,8 +28,9 @@
 ```
 emulsion-suite/                     # pnpm workspace monorepo
 ├── packages/
-│   ├── emulsion/                   # Python core — FastAPI integration, Jinja2, CLI, extensions
-│   └── emulsion-react/             # TypeScript — @emulsion/react (hydration, Island component, Vite plugin)
+│   ├── emulsion/                   # Python core — FastAPI integration, Jinja2, CLI, extensions (UI-agnostic)
+│   └── emulsion-react/             # UI adapter — @emulsion/react (hydration, Island component, Vite plugin)
+│   # Future: emulsion-vue/, emulsion-svelte/, etc.
 ├── extensions/
 │   ├── emulsion-siteswan/          # SiteSwan website importer (Python, stub)
 │   └── emulsion-export/            # Template exporter (Python, stub)
@@ -48,7 +55,7 @@ emulsion-suite/                     # pnpm workspace monorepo
 | Python server | FastAPI >=0.115, uvicorn, Jinja2, Pydantic v2 |
 | Python tooling | hatchling, uv, typer, ruff, mypy, pytest |
 | JS bundler | Vite >=6.0 |
-| UI | React 19, React Router 7 (createBrowserRouter) |
+| UI (via adapter) | React 19, React Router 7 (emulsion-react); future: Vue, Svelte, etc. |
 | Monorepo | pnpm 9, changesets |
 
 ## Development Workflow
