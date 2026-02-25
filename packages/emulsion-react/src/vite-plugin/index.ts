@@ -18,8 +18,8 @@ import { readFileSync } from "node:fs";
 import { resolve, join, dirname } from "node:path";
 import type { Plugin, ResolvedConfig } from "vite";
 import type { NormalizedOutputOptions, OutputBundle } from "rollup";
-import { scanIslands } from "./scan-islands";
-import { generateManifest } from "./generate-manifest";
+import { scanIslands } from "./scan-islands.js";
+import { generateManifest } from "./generate-manifest.js";
 
 // ------------------------------------------------------------------
 // Plugin options

@@ -9,12 +9,14 @@
  * 5. Subscribe to router navigation events to re-hydrate after SPA transitions
  */
 
+/// <reference types="vite/client" />
+
 import { createRoot } from "react-dom/client";
 import React from "react";
-import { Island } from "./Island";
-import type { IslandRegistry } from "./registry";
-import { createEmulsionRouter } from "./router";
-import type { RemixRouter } from "react-router";
+import { Island } from "./Island.js";
+import type { IslandRegistry } from "./registry.js";
+import { createEmulsionRouter } from "./router.js";
+import type { EmulsionRouter } from "./router.js";
 
 // ------------------------------------------------------------------
 // Public API
@@ -30,16 +32,24 @@ import type { RemixRouter } from "react-router";
  *   hydrateIslands(registry);
  */
 export function hydrateIslands(registry: IslandRegistry): void {
-  const router = createEmulsionRouter();
-  _hydrateAll(registry, router);
-  _subscribeToNavigations(router, registry);
+  const routes = window.__EMULSION_ROUTES__ ?? [];
+
+  if (routes.length > 0) {
+    // SPA mode: create router for client-side navigation between pages
+    const router = createEmulsionRouter();
+    _hydrateAll(registry, router);
+    _subscribeToNavigations(router, registry);
+  } else {
+    // No routes defined (dev mode or static pages): hydrate islands only
+    _hydrateAll(registry, null);
+  }
 }
 
 // ------------------------------------------------------------------
 // Internal: hydrate all islands on the current page
 // ------------------------------------------------------------------
 
-function _hydrateAll(registry: IslandRegistry, router: RemixRouter): void {
+function _hydrateAll(registry: IslandRegistry, router: EmulsionRouter | null): void {
   const placeholders = document.querySelectorAll<HTMLElement>("[data-island]");
 
   placeholders.forEach((el) => {
@@ -77,7 +87,7 @@ function _mountIsland(
   name: string,
   props: Record<string, unknown>,
   loader: IslandRegistry[string],
-  router: RemixRouter,
+  router: EmulsionRouter | null,
 ): void {
   el.setAttribute("data-hydrated", "pending");
 
@@ -137,16 +147,22 @@ function _schedule(fn: () => void, priority: string, el: HTMLElement): void {
 // Internal: SPA navigation — re-hydrate after React Router transitions
 // ------------------------------------------------------------------
 
-function _subscribeToNavigations(router: RemixRouter, registry: IslandRegistry): void {
+function _subscribeToNavigations(router: EmulsionRouter, registry: IslandRegistry): void {
+  let previousPathname = window.location.pathname;
+
   router.subscribe((state) => {
     // Only act when a navigation has fully settled
     if (state.navigation.state !== "idle") return;
-    if (state.navigation.location == null) return;
+
+    // state.location is the *current* location after navigation completes
+    // (state.navigation.location only exists while navigation is in-flight)
+    const currentPathname = state.location.pathname;
+    if (currentPathname === previousPathname) return;
+    previousPathname = currentPathname;
 
     // v1 strategy: fetch the new page's HTML shell from FastAPI,
     // swap <main>, then re-run hydrateAll on the new nodes.
-    const targetUrl =
-      state.navigation.location.pathname + state.navigation.location.search;
+    const targetUrl = state.location.pathname + state.location.search;
 
     void _swapPage(targetUrl, registry, router);
   });
@@ -155,7 +171,7 @@ function _subscribeToNavigations(router: RemixRouter, registry: IslandRegistry):
 async function _swapPage(
   url: string,
   registry: IslandRegistry,
-  router: RemixRouter,
+  router: EmulsionRouter,
 ): Promise<void> {
   try {
     const response = await fetch(url, {

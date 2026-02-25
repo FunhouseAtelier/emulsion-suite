@@ -52,6 +52,7 @@ class RouteRegistry:
             path=path,
             endpoint=handler,
             response_class=HTMLResponse,
+            response_model=None,
             name=route_kwargs.pop("name", page_class.__name__),
             **route_kwargs,
         )

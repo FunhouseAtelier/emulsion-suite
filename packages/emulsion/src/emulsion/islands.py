@@ -107,6 +107,13 @@ def vite_scripts_html(manifest: IslandManifest | None, *, static_url_prefix: str
         port = get_vite_port()
         return (
             f'<script type="module" src="http://localhost:{port}/@vite/client"></script>\n'
+            f'<script type="module">\n'
+            f'  import RefreshRuntime from "http://localhost:{port}/@react-refresh";\n'
+            f"  RefreshRuntime.injectIntoGlobalHook(window);\n"
+            f"  window.$RefreshReg$ = () => {{}};\n"
+            f"  window.$RefreshSig$ = () => (type) => type;\n"
+            f"  window.__vite_plugin_react_preamble_installed__ = true;\n"
+            f"</script>\n"
             f'<script type="module" src="http://localhost:{port}/src/main.ts"></script>'
         )
     if manifest is None:

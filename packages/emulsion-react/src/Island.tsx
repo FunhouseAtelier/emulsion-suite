@@ -10,8 +10,8 @@
  */
 
 import React, { Suspense, useEffect, type ComponentType } from "react";
-import type { IslandLoader, IslandComponent } from "./registry";
-import type { RemixRouter } from "react-router";
+import type { IslandLoader, IslandComponent } from "./registry.js";
+import type { EmulsionRouter } from "./router.js";
 
 // ------------------------------------------------------------------
 // Internal cache of React.lazy() wrapped loaders, keyed by island name
@@ -34,8 +34,8 @@ export interface IslandProps {
   name: string;
   props: Record<string, unknown>;
   loader: IslandLoader;
-  /** The page-level router created by createBrowserRouter. */
-  pageRouter: RemixRouter;
+  /** The page-level router created by createBrowserRouter (null when no routes). */
+  pageRouter: EmulsionRouter | null;
   onHydrated?: () => void;
 }
 
@@ -47,7 +47,7 @@ interface InnerProps {
   name: string;
   props: Record<string, unknown>;
   loader: IslandLoader;
-  pageRouter: RemixRouter;
+  pageRouter: EmulsionRouter | null;
   onHydrated?: () => void;
 }
 

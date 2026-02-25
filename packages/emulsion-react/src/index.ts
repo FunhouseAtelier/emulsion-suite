@@ -9,16 +9,16 @@
  *   hydrateIslands(registry);
  */
 
-export { hydrateIslands } from "./hydration";
-export { Island } from "./Island";
-export { createRegistry } from "./registry";
-export { createEmulsionRouter } from "./router";
+export { hydrateIslands } from "./hydration.js";
+export { Island } from "./Island.js";
+export { createRegistry } from "./registry.js";
+export { createEmulsionRouter } from "./router.js";
 
 export type {
   IslandComponent,
   IslandLoader,
   IslandRegistry,
-} from "./registry";
+} from "./registry.js";
 
-export type { IslandProps } from "./Island";
-export type { EmulsionClientRoute } from "./router";
+export type { IslandProps } from "./Island.js";
+export type { EmulsionClientRoute } from "./router.js";

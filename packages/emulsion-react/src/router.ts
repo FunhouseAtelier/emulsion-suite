@@ -11,7 +11,10 @@
  */
 
 import { createBrowserRouter } from "react-router";
-import type { RemixRouter, RouteObject } from "react-router";
+import type { RouteObject } from "react-router";
+
+/** The router instance type returned by createBrowserRouter. */
+export type EmulsionRouter = ReturnType<typeof createBrowserRouter>;
 
 // ------------------------------------------------------------------
 // Route config injected by @emulsion/vite-plugin
@@ -43,7 +46,7 @@ declare global {
  * Called once per page load from hydration.ts.
  * The router subscribes to navigation events to trigger island re-hydration.
  */
-export function createEmulsionRouter(): RemixRouter {
+export function createEmulsionRouter(): EmulsionRouter {
   const rawRoutes: EmulsionClientRoute[] = window.__EMULSION_ROUTES__ ?? [];
 
   const routeObjects: RouteObject[] = rawRoutes.map((route) => ({
