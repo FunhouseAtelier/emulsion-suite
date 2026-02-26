@@ -6,10 +6,15 @@
  * In development, `virtual:emulsion-registry` serves a live-updated version.
  */
 
-import { createRegistry } from "@emulsion/react";
+import { createRegistry, type IslandLoader } from "@emulsion/react";
 
+// Each import is cast `as unknown as IslandLoader` because island props flow through
+// JSON serialisation (Python → data-props attr → hydration runtime), so TypeScript
+// cannot verify at compile time that the deserialised Record<string, unknown> satisfies
+// each component's specific prop types. The cast is the intentional acknowledgement of
+// that runtime boundary.
 export const registry = createRegistry({
-  Counter: () => import("./Counter"),
-  AddToCart: () => import("./AddToCart"),
-  ReviewCarousel: () => import("./ReviewCarousel"),
+  Counter: (() => import("./Counter")) as unknown as IslandLoader,
+  AddToCart: (() => import("./AddToCart")) as unknown as IslandLoader,
+  ReviewCarousel: (() => import("./ReviewCarousel")) as unknown as IslandLoader,
 });

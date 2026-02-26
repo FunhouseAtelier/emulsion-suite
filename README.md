@@ -13,17 +13,17 @@ Think Next.js/Remix, but Python-native — or Astro, but with Python owning the 
 
 ## Packages
 
-| Package | Description | Version |
-|---|---|---|
-| [`emulsion`](packages/emulsion/) | Python core — FastAPI integration, Jinja2, CLI, extensions | 0.1.0 |
-| [`@emulsion/react`](packages/emulsion-react/) | UI adapter — island hydration, Vite plugin, React Router integration | 0.1.0 |
+| Package                                       | Description                                                          | Version |
+| --------------------------------------------- | -------------------------------------------------------------------- | ------- |
+| [`emulsion`](packages/emulsion/)              | Python core — FastAPI integration, Jinja2, CLI, extensions           | 0.1.0   |
+| [`@emulsion/react`](packages/emulsion-react/) | UI adapter — island hydration, Vite plugin, React Router integration | 0.1.0   |
 
 ### Extensions (stubs)
 
-| Package | Description |
-|---|---|
+| Package                                              | Description               |
+| ---------------------------------------------------- | ------------------------- |
 | [`emulsion-siteswan`](extensions/emulsion-siteswan/) | SiteSwan website importer |
-| [`emulsion-export`](extensions/emulsion-export/) | Template exporter |
+| [`emulsion-export`](extensions/emulsion-export/)     | Template exporter         |
 
 ## Quick Start
 
@@ -66,11 +66,9 @@ class HomePage(EmulsionPage):
 
 ```html
 <!-- templates/home.html -->
-{% extends "base.html" %}
-{% block content %}
-  <h1>{{ greeting }}</h1>
-  {{ island("Counter", {"initialCount": 0}) }}
-{% endblock %}
+{% extends "base.html" %} {% block content %}
+<h1>{{ greeting }}</h1>
+{{ island("Counter", {"initialCount": 0}) }} {% endblock %}
 ```
 
 ```tsx
@@ -108,13 +106,13 @@ emulsion new <name>        # Scaffold a new Emulsion app
 
 ## Technology Stack
 
-| Layer | Technology |
-|---|---|
-| Python server | FastAPI, uvicorn, Jinja2, Pydantic v2 |
-| Python tooling | hatchling, uv, typer, ruff, mypy, pytest |
-| JS bundler | Vite 6 |
-| UI (via adapter) | React 19, React Router 7 |
-| Monorepo | pnpm 9, changesets |
+| Layer            | Technology                               |
+| ---------------- | ---------------------------------------- |
+| Python server    | FastAPI, uvicorn, Jinja2, Pydantic v2    |
+| Python tooling   | hatchling, uv, typer, ruff, mypy, pytest |
+| JS bundler       | Vite 6                                   |
+| UI (via adapter) | React 19, React Router 7                 |
+| Monorepo         | pnpm 9, changesets                       |
 
 ## Repository Structure
 

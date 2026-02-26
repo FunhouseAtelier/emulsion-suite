@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+type CartStatus = "idle" | "adding" | "added";
+
 interface AddToCartProps {
   productId: string;
   productName: string;
@@ -7,9 +9,13 @@ interface AddToCartProps {
   inStock: boolean;
 }
 
-export default function AddToCart({ productId, productName, price, inStock }: AddToCartProps) {
+export default function AddToCart({
+  productName,
+  price,
+  inStock,
+}: AddToCartProps) {
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState<"idle" | "adding" | "added">("idle");
+  const [status, setStatus] = useState<CartStatus>("idle");
 
   const handleAdd = async () => {
     setStatus("adding");
@@ -21,14 +27,28 @@ export default function AddToCart({ productId, productName, price, inStock }: Ad
 
   if (!inStock) {
     return (
-      <div style={{ padding: "1rem", background: "#fee2e2", borderRadius: "6px", color: "#991b1b" }}>
+      <div
+        style={{
+          padding: "1rem",
+          background: "#fee2e2",
+          borderRadius: "6px",
+          color: "#991b1b",
+        }}
+      >
         Out of stock
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "1rem",
+        flexWrap: "wrap",
+      }}
+    >
       <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         Qty:
         <input
@@ -55,13 +75,14 @@ export default function AddToCart({ productId, productName, price, inStock }: Ad
           transition: "background 0.2s",
         }}
       >
-        {status === "idle" && `Add ${quantity} to Cart — $${(price * quantity).toFixed(2)}`}
+        {status === "idle" &&
+          `Add ${quantity} to Cart — $${(price * quantity).toFixed(2)}`}
         {status === "adding" && "Adding…"}
         {status === "added" && "Added ✓"}
       </button>
 
       <span style={{ fontSize: "0.85rem", color: "#6b7280" }}>
-        Product #{productId}
+        {productName}
       </span>
     </div>
   );

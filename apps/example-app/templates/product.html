@@ -1,24 +1,15 @@
-{% extends "base.html" %}
-
-{% block title %}{{ product.name }} — Emulsion Example{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ product.name }} — Emulsion
+Example{% endblock %} {% block content %}
 <h1>{{ product.name }}</h1>
 <p>{{ product.description }}</p>
 <p><strong>Price:</strong> ${{ "%.2f"|format(product.price) }}</p>
 
-{# AddToCart island — injected directly into the Jinja2 template #}
-{{ island("AddToCart", {
-    "productId": product.id,
-    "productName": product.name,
-    "price": product.price,
-    "inStock": product.in_stock
-}) }}
+{# AddToCart island — injected directly into the Jinja2 template #} {{
+island("AddToCart", { "productId": product.id, "productName": product.name,
+"price": product.price, "inStock": product.in_stock }) }}
 
-<hr style="margin: 2rem 0;">
+<hr class="divider" />
 
 <h2>Customer Reviews</h2>
-{# ReviewCarousel island — eager by default; could use priority="visible" #}
-{{ island("ReviewCarousel", {"productId": product.id}) }}
-
-{% endblock %}
+{# ReviewCarousel island — eager by default; could use priority="visible" #} {{
+island("ReviewCarousel", {"productId": product.id}) }} {% endblock %}

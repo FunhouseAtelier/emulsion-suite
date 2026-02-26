@@ -13,6 +13,8 @@ export default defineConfig({
   ],
   build: {
     manifest: true,
+    // Preserve hand-written assets (e.g. static/css/) across builds
+    emptyOutDir: false,
     rollupOptions: {
       output: {
         dir: "static",
